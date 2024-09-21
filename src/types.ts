@@ -1,6 +1,8 @@
 export interface RootState {
     donate: {
         donate: number;
+        isLoading: boolean;
+        isPaymentSuccess: boolean | null;
     };
     message: {
         message: string;

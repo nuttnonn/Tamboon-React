@@ -2,9 +2,9 @@ export const MessageActionTypes = {
     UPDATE_MESSAGE: 'UPDATE_MESSAGE',
 }
 
-export const updateTotalDonate = (amount: number) => ({
+export const updateMessage = (message: string) => ({
     type: MessageActionTypes.UPDATE_MESSAGE,
     payload: {
-        donate: amount,
+        message: message,
     },
 })

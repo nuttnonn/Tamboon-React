@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Charity } from '../types';
+import { Charity, RootState } from '../types';
 import { Button, Radio } from 'antd';
 import { CloseCircleOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearPaymentStatus } from '../redux/actions/donateActions';
+import { updateMessage } from '../redux/actions/messageActions';
 
 const CardWrapper = styled.div`
     width: 100%;
@@ -44,9 +47,9 @@ const AmountContainer = styled.div`
     background-color: rgba(255, 255, 255, 0.95);
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
     justify-content: center;
     align-items: center;
+    gap: 1.5rem;
 `;
 
 const CloseButton = styled(CloseCircleOutlined)`
@@ -63,6 +66,20 @@ const CloseButton = styled(CloseCircleOutlined)`
     }
 `;
 
+const MessageContainer = styled.div<{ isSuccess: boolean | null }>`
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: ${({ isSuccess }) => (isSuccess ? 'rgba(143,206,143,0.8)' : 'rgba(208,102,102,0.8)')};
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    gap: 1.5rem;
+    text-align: center;
+`;
+
 interface CardProps {
     charity: Charity,
     selectedAmount: number,
@@ -76,6 +93,11 @@ const Card: React.FC<CardProps> = ({
     onAmountChange,
     onPay,
 }) => {
+    const dispatch = useDispatch();
+    const isLoading = useSelector((state: RootState) => state.donate.isLoading);
+    const message = useSelector((state: RootState) => state.message.message);
+    const isPaymentSuccess = useSelector((state: RootState) => state.donate.isPaymentSuccess);
+
     const [isSelectAmountOpened, setIsSelectAmountOpened] = useState<boolean>(false);
 
     const { id, name, image, currency } = charity;
@@ -96,7 +118,11 @@ const Card: React.FC<CardProps> = ({
 
     const handlePayButtonClick = () => {
         onPay(id, selectedAmount, currency)
-        setIsSelectAmountOpened(false);
+    }
+
+    const clearStatus = () => {
+        dispatch(clearPaymentStatus());
+        dispatch(updateMessage(''));
     }
 
     return (
@@ -112,7 +138,7 @@ const Card: React.FC<CardProps> = ({
                     Donate
                 </Button>
             </TitleContainer>
-            {isSelectAmountOpened && (
+            {(isSelectAmountOpened && !message.length) && (
                 <AmountContainer>
                     <p>Select the amount to donate ({currency})</p>
                     <Radio.Group
@@ -120,6 +146,7 @@ const Card: React.FC<CardProps> = ({
                         onChange={(event) => handleAmountChange(event.target.value)}
                         value={selectedAmount}
                         optionType="button"
+                        disabled={isLoading}
                     />
                     <CloseButton
                         onClick={handleCloseButtonClick}
@@ -128,10 +155,24 @@ const Card: React.FC<CardProps> = ({
                         type="primary"
                         ghost
                         onClick={handlePayButtonClick}
+                        loading={isLoading}
                     >
                         Pay
                     </Button>
                 </AmountContainer>
+            )}
+            {message.length && (
+                <MessageContainer isSuccess={isPaymentSuccess}>
+                    {message}
+                    <Button
+                        type="text"
+                        ghost
+                        onClick={() => clearStatus()}
+                    >
+                        Continue
+                    </Button>
+                    <CloseButton onClick={() => clearStatus()} />
+                </MessageContainer>
             )}
         </CardWrapper>
     );
