@@ -1,15 +1,11 @@
 import React, { useState, useEffect, CSSProperties } from 'react';
 import fetch from 'isomorphic-fetch';
-import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { summaryDonations } from './utils/helpers';
 import { RootState } from './types';
 import { updateTotalDonate } from './redux/actions/donateActions';
-
-const Card = styled.div`
-    margin: 10px;
-    border: 1px solid #ccc;
-`;
+import Card from './components/Card';
+import Message from './components/Message';
 
 interface Charity {
     id: number;
@@ -40,45 +36,26 @@ const App = () => {
         fetchData();
     }, [dispatch]);
 
+    const handleAmountChange = (amount: number) => {
+        setSelectedAmount(amount);
+    }
+
     const handlePay = (id: number, amount: number, currency: string) => {};
-
-    const cards = charities.map((item, i) => {
-        const payments = [10, 20, 50, 100, 500].map((amount, j) => (
-            <label key={j}>
-                <input
-                    type="radio"
-                    name="payment"
-                    onClick={() => setSelectedAmount(amount)}
-                />
-                {amount}
-            </label>
-        ));
-
-        return (
-            <Card key={i}>
-                <p>{item.name}</p>
-                {payments}
-                <button onClick={() => handlePay(item.id, selectedAmount, item.currency)}>
-                    Pay
-                </button>
-            </Card>
-        );
-    });
-
-    const style: CSSProperties = {
-        color: 'red',
-        margin: '1em 0',
-        fontWeight: 'bold',
-        fontSize: '16px',
-        textAlign: 'center',
-    };
 
     return (
         <div>
             <h1>Tamboon React</h1>
             <p>All donations: {donate}</p>
-            <p style={style}>{message}</p>
-            {cards}
+            <Message message={message} />
+            {charities.map((charity, index) => (
+                <Card
+                    key={charity.id}
+                    charity={charity}
+                    selectedAmount={selectedAmount}
+                    onAmountChange={handleAmountChange}
+                    onPay={handlePay}
+                />
+            ))}
         </div>
     );
 };
