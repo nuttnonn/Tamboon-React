@@ -45,7 +45,13 @@ const App = () => {
         setSelectedAmount(amount);
     }
 
-    const handlePay = (id: number, amount: number, currency: string) => {};
+    const handlePay = (id: number, amount: number, currency: string) => {
+        axios.post('/payments', {
+            charitiesId: id,
+            amount,
+            currency,
+        });
+    };
 
     return (
         <div>
