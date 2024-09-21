@@ -20,7 +20,7 @@ const donateReducer = (state = initialState, action: DonateAction): DonateState 
         case DonateActionTypes.UPDATE_TOTAL_DONATE:
             return {
                 ...state,
-                donate: state.donate + action.payload.donate,
+                donate: action.payload.donate,
             };
         default:
             return state;
