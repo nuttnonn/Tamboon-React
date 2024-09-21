@@ -14,6 +14,10 @@ const CardWrapper = styled.div`
     border-radius: 8px;
     box-shadow: 0.1rem 0.1rem 0.8rem #b6b5b5;
     overflow: hidden;
+    
+    @media screen and (max-width: 440px) {
+        height: 560px;
+    }
 `;
 
 const Image = styled.img`

@@ -19,6 +19,11 @@ const GlobalStyles = createGlobalStyle`
         text-align: center;
         font-weight: bold;
         margin: 1.5em 0;
+        
+        @media (max-width: 440px) {
+            font-size: 3.75rem;
+            margin: 0.5em 0.5em;
+        }
     }
     
     h2 {
