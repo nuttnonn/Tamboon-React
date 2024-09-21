@@ -6,9 +6,7 @@ import { updateTotalDonate } from './redux/actions/donateActions';
 import Card from './components/Card';
 import Message from './components/Message';
 import axios from 'axios';
-
-axios.defaults.baseURL = 'http://localhost:3001';
-axios.defaults.headers.common['Content-Type'] = 'application/json';
+import './configs/axiosConfig'
 
 interface Charity {
     id: number;
