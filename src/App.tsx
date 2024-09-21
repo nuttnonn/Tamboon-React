@@ -5,8 +5,9 @@ import { RootState } from './types';
 import { updateTotalDonate } from './redux/actions/donateActions';
 import Card from './components/Card';
 import Message from './components/Message';
-import axios from 'axios';
 import './configs/axiosConfig'
+import { fetchCharities } from './utils/api/charitiesApi';
+import { fetchPayments, makePayment } from './utils/api/paymentApi';
 
 interface Charity {
     id: number;
@@ -25,11 +26,11 @@ const App = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const charityResponse = await axios.get('/charities');
-                setCharities(charityResponse.data);
+                const charity = await fetchCharities();
+                setCharities(charity.data);
 
-                const paymentResponse = await axios.get('/payments');
-                const totalDonation = summaryDonations(paymentResponse.data.map((item: { amount: number }) => item.amount));
+                const payment = await fetchPayments();
+                const totalDonation = summaryDonations(payment.data.map((item: { amount: number }) => item.amount));
                 dispatch(updateTotalDonate(totalDonation));
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -43,12 +44,12 @@ const App = () => {
         setSelectedAmount(amount);
     }
 
-    const handlePay = (id: number, amount: number, currency: string) => {
-        axios.post('/payments', {
-            charitiesId: id,
-            amount,
-            currency,
-        });
+    const handlePay = async (id: number, amount: number, currency: string) => {
+        try {
+            await makePayment(id, amount, currency);
+        } catch (error) {
+            console.error('Error making payment:', error);
+        }
     };
 
     return (
