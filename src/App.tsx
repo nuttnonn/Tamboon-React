@@ -1,4 +1,4 @@
-import React, { useState, useEffect, CSSProperties } from 'react';
+import React, { useState, useEffect } from 'react';
 import fetch from 'isomorphic-fetch';
 import { useSelector, useDispatch } from 'react-redux';
 import { summaryDonations } from './utils/helpers';
@@ -47,7 +47,7 @@ const App = () => {
             <h1>Tamboon React</h1>
             <p>All donations: {donate}</p>
             <Message message={message} />
-            {charities.map((charity, index) => (
+            {charities.map((charity) => (
                 <Card
                     key={charity.id}
                     charity={charity}
