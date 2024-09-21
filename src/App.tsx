@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import fetch from 'isomorphic-fetch';
 import { useSelector, useDispatch } from 'react-redux';
 import { summaryDonations } from './utils/helpers';
 import { RootState } from './types';
 import { updateTotalDonate } from './redux/actions/donateActions';
 import Card from './components/Card';
 import Message from './components/Message';
+import axios from 'axios';
+
+axios.defaults.baseURL = 'http://localhost:3001';
+axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 interface Charity {
     id: number;
@@ -23,14 +26,16 @@ const App = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const charityResponse = await fetch('http://localhost:3001/charities');
-            const charityData = await charityResponse.json();
-            setCharities(charityData);
+            try {
+                const charityResponse = await axios.get('/charities');
+                setCharities(charityResponse.data);
 
-            const paymentResponse = await fetch('http://localhost:3001/payments');
-            const paymentData = await paymentResponse.json();
-            const totalDonation = summaryDonations(paymentData.map((item: { amount: number }) => item.amount));
-            dispatch(updateTotalDonate(totalDonation));
+                const paymentResponse = await axios.get('/payments');
+                const totalDonation = summaryDonations(paymentResponse.data.map((item: { amount: number }) => item.amount));
+                dispatch(updateTotalDonate(totalDonation));
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         };
 
         fetchData();
