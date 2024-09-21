@@ -1,7 +1,7 @@
 const path = require('path');
 
 const config = {
-  entry: './src/index.js',
+  entry: './src/index.tsx',
   output: {
     publicPath: '/dist/',
     path: path.resolve(__dirname, 'dist'),
@@ -12,7 +12,8 @@ const config = {
 
   devServer: {
     inline: true,
-    host: '0.0.0.0',
+    // host: '0.0.0.0',
+    host: 'localhost',
     port: 3000,
     historyApiFallback: true,
     disableHostCheck: true,
@@ -22,13 +23,24 @@ const config = {
   module: {
     rules: [
       {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'ts-loader',
+        },
+      },
+      {
         test: /\.js$/,
-        exclude: [/node_modules/],
+        exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
         },
       },
     ],
+  },
+
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
   },
 
   mode: 'development',
