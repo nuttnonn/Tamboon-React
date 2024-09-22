@@ -2,10 +2,10 @@ export interface RootState {
     donate: {
         donate: number;
         isLoading: boolean;
-        isPaymentSuccess: boolean | null;
+        isPaymentSuccess: { [charityId: number]: boolean | null };
     };
     message: {
-        message: string;
+        messages: { [charityId: number]: string };
     };
 }
 

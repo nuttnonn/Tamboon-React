@@ -17,14 +17,23 @@ export const paymentRequest = () => ({
     type: DonateActionTypes.PAYMENT_REQUEST,
 });
 
-export const paymentSuccess = () => ({
+export const paymentSuccess = (charityId: number) => ({
     type: DonateActionTypes.PAYMENT_SUCCESS,
+    payload: {
+        charityId,
+    },
 });
 
-export const paymentFailure = () => ({
+export const paymentFailure = (charityId: number) => ({
     type: DonateActionTypes.PAYMENT_FAILURE,
+    payload: {
+        charityId,
+    },
 });
 
-export const clearPaymentStatus = () => ({
+export const clearPaymentStatus = (charityId: number) => ({
     type: DonateActionTypes.CLEAR_PAYMENT_STATUS,
+    payload: {
+        charityId,
+    },
 });

@@ -1,18 +1,19 @@
 import { MessageActionTypes } from '../actions/messageActions'
 
 interface MessageState {
-    message: string;
+    messages: { [key: number]: string };
 }
 
 interface MessageAction {
     type: string;
     payload: {
+        charityId: number;
         message: string;
-    }
+    };
 }
 
 const initialState: MessageState = {
-    message: '',
+    messages: {},
 };
 
 const messageReducer = (state = initialState, action: MessageAction): MessageState => {
@@ -20,7 +21,10 @@ const messageReducer = (state = initialState, action: MessageAction): MessageSta
         case MessageActionTypes.UPDATE_MESSAGE:
             return {
                 ...state,
-                message: action.payload.message,
+                messages: {
+                    ...state.messages,
+                    [action.payload.charityId]: action.payload.message,
+                },
             };
         default:
             return state;

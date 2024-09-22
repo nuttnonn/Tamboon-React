@@ -22,7 +22,6 @@ const App = () => {
     const donate = useSelector((state: RootState) => state.donate.donate);
 
     const [charities, setCharities] = useState<Charity[]>([]);
-    const [selectedAmount, setSelectedAmount] = useState<number>(10);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -41,14 +40,10 @@ const App = () => {
         fetchData();
     }, [dispatch]);
 
-    const handleAmountChange = (amount: number) => {
-        setSelectedAmount(amount);
-    }
-
-    const clearStatus = () => {
+    const clearStatus = (id: number) => {
         setTimeout(() => {
-            dispatch(clearPaymentStatus());
-            dispatch(updateMessage(''));
+            dispatch(clearPaymentStatus(id));
+            dispatch(updateMessage(id, ''));
         }, 5000);
     }
 
@@ -60,14 +55,14 @@ const App = () => {
             const totalDonation = summaryDonations(payment.data.map((item: { amount: number }) => item.amount));
             dispatch(updateTotalDonate(totalDonation));
 
-            dispatch(updateMessage(`Successfully donated ${amount} ${currency}!`));
-            dispatch(paymentSuccess());
-            clearStatus();
+            dispatch(updateMessage(id,`Successfully donated ${amount} ${currency}!`));
+            dispatch(paymentSuccess(id));
+            clearStatus(id);
         } catch (error) {
             console.error('Error making payment:', error);
-            dispatch(paymentFailure());
-            dispatch(updateMessage('Payment failed. Please try again.'));
-            clearStatus();
+            dispatch(paymentFailure(id));
+            dispatch(updateMessage(id,'Payment failed. Please try again.'));
+            clearStatus(id);
         }
     };
 
@@ -82,8 +77,6 @@ const App = () => {
                         <Card
                             key={charity.id}
                             charity={charity}
-                            selectedAmount={selectedAmount}
-                            onAmountChange={handleAmountChange}
                             onPay={handlePay}
                         />
                     ))}

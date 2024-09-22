@@ -82,25 +82,20 @@ const MessageContainer = styled.div<{ isSuccess: boolean | null }>`
 
 interface CardProps {
     charity: Charity,
-    selectedAmount: number,
-    onAmountChange: (amount: number) => void,
     onPay: (id: number, amount: number, currency: string) => void,
 }
 
-const Card: React.FC<CardProps> = ({
-    charity,
-    selectedAmount,
-    onAmountChange,
-    onPay,
-}) => {
+const Card: React.FC<CardProps> = ({ charity, onPay }) => {
+    const { id, name, image, currency } = charity;
+
     const dispatch = useDispatch();
     const isLoading = useSelector((state: RootState) => state.donate.isLoading);
-    const message = useSelector((state: RootState) => state.message.message);
-    const isPaymentSuccess = useSelector((state: RootState) => state.donate.isPaymentSuccess);
+    const message = useSelector((state: RootState) => state.message.messages[id]);
+    const isPaymentSuccess = useSelector((state: RootState) => state.donate.isPaymentSuccess[id]);
 
+    const [selectedAmount, setSelectedAmount] = useState<number>(10);
     const [isSelectAmountOpened, setIsSelectAmountOpened] = useState<boolean>(false);
 
-    const { id, name, image, currency } = charity;
     const imageUrl = `/images/${image}`
     const donationAmounts: number[] = [10, 20, 50, 100, 500];
 
@@ -113,16 +108,18 @@ const Card: React.FC<CardProps> = ({
     }
 
     const handleAmountChange = (amount: number) => {
-        onAmountChange(amount)
+        setSelectedAmount(amount);
     }
 
-    const handlePayButtonClick = () => {
-        onPay(id, selectedAmount, currency)
+    const handlePayButtonClick = async () => {
+        await onPay(id, selectedAmount, currency)
+        setIsSelectAmountOpened(false);
     }
 
     const clearStatus = () => {
-        dispatch(clearPaymentStatus());
-        dispatch(updateMessage(''));
+        dispatch(clearPaymentStatus(id));
+        dispatch(updateMessage(id, ''));
+        setIsSelectAmountOpened(false);
     }
 
     return (
@@ -134,11 +131,12 @@ const Card: React.FC<CardProps> = ({
                     type="primary"
                     ghost
                     onClick={handleDonateButtonClick}
+                    disabled={isLoading}
                 >
                     Donate
                 </Button>
             </TitleContainer>
-            {(isSelectAmountOpened && !message.length) && (
+            {(isSelectAmountOpened && !message) && (
                 <AmountContainer>
                     <p>Select the amount to donate ({currency})</p>
                     <Radio.Group
@@ -161,17 +159,16 @@ const Card: React.FC<CardProps> = ({
                     </Button>
                 </AmountContainer>
             )}
-            {message.length && (
+            {message && (
                 <MessageContainer isSuccess={isPaymentSuccess}>
                     {message}
                     <Button
                         type="text"
-                        ghost
-                        onClick={() => clearStatus()}
+                        onClick={clearStatus}
                     >
                         Continue
                     </Button>
-                    <CloseButton onClick={() => clearStatus()} />
+                    <CloseButton onClick={clearStatus} />
                 </MessageContainer>
             )}
         </CardWrapper>
