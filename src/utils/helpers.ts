@@ -1,8 +1,10 @@
 import { Charity, CharityDonations, Payment } from '../types';
 
-export const summaryDonations = (donations: number[]) => (
-    donations.reduce((accumulator, value) => accumulator + value)
-);
+export const summaryDonations = (donations: number[]) => {
+    if (donations.length === 0) return 0;
+
+    return donations.reduce((accumulator, value) => accumulator + value)
+};
 
 export const hundredsDivider = (donation: number) => (
     donation.toLocaleString()
