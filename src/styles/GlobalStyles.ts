@@ -16,9 +16,10 @@ const GlobalStyles = createGlobalStyle`
     }
 
     h1 {
+        color: #173799;
         text-align: center;
         font-weight: bold;
-        margin: 1.5em 0;
+        margin: 1.5em 0 0.75em 0;
         
         @media (max-width: 440px) {
             font-size: 3.75rem;

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { summaryDonations } from './utils/helpers';
-import { Charity, RootState } from './types';
+import { useDispatch } from 'react-redux';
+import { summaryDonations, summaryDonationsByCharity } from './utils/helpers';
+import { Charity, Payment } from './types';
 import {
     clearPaymentStatus,
     paymentFailure,
     paymentRequest,
-    paymentSuccess,
+    paymentSuccess, updateCharityDonate,
     updateTotalDonate,
 } from './redux/actions/donateActions';
 import { updateMessage } from './redux/actions/messageActions';
@@ -17,23 +17,26 @@ import { fetchPayments, makePayment } from './utils/api/paymentApi';
 import GlobalStyles from './styles/GlobalStyles';
 import { CardContainer, Container, NotFoundContainer, SearchInput } from './components/StyledComponents';
 import { SearchOutlined } from '@ant-design/icons';
+import AllDonationAmount from './components/AllDonationAmount';
+import { Empty } from 'antd';
 
 const App = () => {
     const dispatch = useDispatch();
-    const donate = useSelector((state: RootState) => state.donate.donate);
 
     const [charities, setCharities] = useState<Charity[]>([]);
+    const [payments, setPayments] = useState<Payment[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const charity = await fetchCharities();
-                setCharities(charity.data);
+                const [charityData, paymentData] = await Promise.all([
+                    fetchCharities(),
+                    fetchPayments(),
+                ]);
 
-                const payment = await fetchPayments();
-                const totalDonation = summaryDonations(payment.data.map((item: { amount: number }) => item.amount));
-                dispatch(updateTotalDonate(totalDonation));
+                setCharities(charityData.data);
+                setPayments(paymentData.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -41,6 +44,16 @@ const App = () => {
 
         fetchData();
     }, [dispatch]);
+
+    useEffect(() => {
+        if (charities.length && payments.length) {
+            const totalDonation = summaryDonations(payments.map((item: { amount: number }) => item.amount));
+            const totalCharityDonations = summaryDonationsByCharity(charities, payments);
+
+            dispatch(updateTotalDonate(totalDonation));
+            dispatch(updateCharityDonate(totalCharityDonations));
+        }
+    }, [charities, payments, dispatch]);
 
     const clearStatus = (id: number) => {
         setTimeout(() => {
@@ -53,9 +66,9 @@ const App = () => {
         dispatch(paymentRequest());
         try {
             await makePayment(id, amount, currency);
-            const payment = await fetchPayments();
-            const totalDonation = summaryDonations(payment.data.map((item: { amount: number }) => item.amount));
-            dispatch(updateTotalDonate(totalDonation));
+
+            const paymentData = await fetchPayments();
+            setPayments(paymentData.data);
 
             dispatch(updateMessage(id,`Successfully donated ${amount} ${currency}!`));
             dispatch(paymentSuccess(id));
@@ -87,7 +100,6 @@ const App = () => {
                     allowClear={true}
                     onChange={handleSearch}
                 />
-                <p>All donations: {donate}</p>
                 {filteredCharities.length ? (
                     <CardContainer>
                         {filteredCharities.map((charity) => (
@@ -99,8 +111,11 @@ const App = () => {
                         ))}
                     </CardContainer>
                 ) : (
-                    <NotFoundContainer>Charity not found.</NotFoundContainer>
+                    <NotFoundContainer>
+                        <Empty />
+                    </NotFoundContainer>
                 )}
+                <AllDonationAmount />
             </Container>
         </>
     );

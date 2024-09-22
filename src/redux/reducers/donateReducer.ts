@@ -1,7 +1,9 @@
 import { DonateActionTypes } from '../actions/donateActions'
+import { CharityDonations } from '../../types';
 
 interface DonateState {
     donate: number;
+    charityDonations: CharityDonations;
     isLoading: boolean;
     isPaymentSuccess: { [charityId: number]: boolean | null };
 }
@@ -11,11 +13,13 @@ interface DonateAction {
     payload: {
         charityId: number;
         donate: number;
+        charityDonations: CharityDonations;
     };
 }
 
 const initialState: DonateState = {
     donate: 0,
+    charityDonations: {},
     isLoading: false,
     isPaymentSuccess: {},
 };
@@ -26,6 +30,11 @@ const donateReducer = (state = initialState, action: DonateAction): DonateState 
             return {
                 ...state,
                 donate: action.payload.donate,
+            };
+        case DonateActionTypes.UPDATE_CHARITY_DONATE:
+            return {
+                ...state,
+                charityDonations: action.payload.charityDonations,
             };
         case DonateActionTypes.PAYMENT_REQUEST:
             return {

@@ -1,5 +1,8 @@
+import { CharityDonations } from '../../types';
+
 export const DonateActionTypes = {
     UPDATE_TOTAL_DONATE: 'UPDATE_TOTAL_DONATE',
+    UPDATE_CHARITY_DONATE: 'UPDATE_CHARITY_DONATE',
     PAYMENT_REQUEST: 'PAYMENT_REQUEST',
     PAYMENT_SUCCESS: 'PAYMENT_SUCCESS',
     PAYMENT_FAILURE: 'PAYMENT_FAILURE',
@@ -10,6 +13,13 @@ export const updateTotalDonate = (amount: number) => ({
     type: DonateActionTypes.UPDATE_TOTAL_DONATE,
     payload: {
         donate: amount,
+    },
+});
+
+export const updateCharityDonate = (charityDonations: CharityDonations) => ({
+    type: DonateActionTypes.UPDATE_CHARITY_DONATE,
+    payload: {
+        charityDonations,
     },
 });
 
