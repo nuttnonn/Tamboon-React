@@ -58,6 +58,12 @@ export const TitleContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
+    
+    div {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+    }
 `;
 
 export const AmountContainer = styled.div`

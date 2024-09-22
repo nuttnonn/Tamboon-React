@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Charity, RootState } from '../types';
 import { Button, Radio } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearPaymentStatus } from '../redux/actions/donateActions';
 import { updateMessage } from '../redux/actions/messageActions';
 import { AmountContainer, CardWrapper, CloseButton, Image, MessageContainer, TitleContainer } from './StyledComponents';
+import { hundredsDivider } from '../utils/helpers';
 
 interface CardProps {
     charity: Charity,
@@ -13,6 +14,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ charity, onPay }) => {
     const { id, name, image, currency } = charity;
+    const charityDonations = useSelector((state: RootState) => state.donate.charityDonations);
 
     const dispatch = useDispatch();
     const isLoading = useSelector((state: RootState) => state.donate.isLoading);
@@ -21,9 +23,16 @@ const Card: React.FC<CardProps> = ({ charity, onPay }) => {
 
     const [selectedAmount, setSelectedAmount] = useState<number>(10);
     const [isSelectAmountOpened, setIsSelectAmountOpened] = useState<boolean>(false);
+    const [totalAmount, setTotalAmount] = useState<string | undefined>(undefined);
 
     const imageUrl = `/images/${image}`
     const donationAmounts: number[] = [10, 20, 50, 100, 500];
+
+    useEffect(() => {
+        if (charityDonations && charityDonations[charity.id]) {
+            setTotalAmount(hundredsDivider(charityDonations[charity.id].total));
+        }
+    }, [charityDonations]);
 
     const handleDonateButtonClick = () => {
         setIsSelectAmountOpened(true)
@@ -52,7 +61,7 @@ const Card: React.FC<CardProps> = ({ charity, onPay }) => {
         <CardWrapper>
             <Image src={imageUrl} alt={`${name}-image`} />
             <TitleContainer>
-                <h2>{name}</h2>
+                <h2>{name} {totalAmount && `(Total ${totalAmount} THB)`}</h2>
                 <Button
                     type="primary"
                     ghost
