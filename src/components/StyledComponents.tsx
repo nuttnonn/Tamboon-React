@@ -3,6 +3,14 @@ import { CloseCircleOutlined } from '@ant-design/icons';
 import { Button, Input, Modal } from 'antd';
 import { InputProps } from 'antd/lib/input';
 
+const devices = {
+    mobile: '440px',
+    tablet: '768px',
+    smallLaptop: '1024px',
+    desktop: '1440px',
+    largeDesktop: '1920px',
+};
+
 export const Container = styled.div`
     max-width: 1200px;
     margin: 0 auto;
@@ -12,8 +20,12 @@ export const Container = styled.div`
     justify-content: center;
     align-items: center;
 
-    @media screen and (max-width: 440px) {
-        padding: 40px;
+    @media screen and (max-width: ${devices.tablet}) {
+        padding: 0 14px 120px 14px;
+    }
+
+    @media screen and (max-width: ${devices.mobile}) {
+        padding: 0 10px 90px 10px;
     }
 `;
 
@@ -22,8 +34,16 @@ export const CardContainer = styled.div`
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: ${devices.smallLaptop}) {
+        gap: 1.25rem;
+    }
+
+    @media screen and (max-width: ${devices.tablet}) {
         grid-template-columns: 1fr;
+    }
+
+    @media screen and (max-width: ${devices.mobile}) {
+        gap: 0.75rem;
     }
 `;
 
@@ -40,8 +60,8 @@ export const CardWrapper = styled.div`
     box-shadow: 0.1rem 0.1rem 0.8rem #b6b5b5;
     overflow: hidden;
     
-    @media screen and (max-width: 440px) {
-        height: 560px;
+    @media screen and (max-width: ${devices.mobile}) {
+        height: 260px;
     }
 `;
 
@@ -60,12 +80,20 @@ export const TitleContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
+
+    @media screen and (max-width: ${devices.mobile}) {
+        padding: 0.5rem;
+        
+        h2 {
+            font-size: 14px;
+        };
+    }
     
     div {
         display: flex;
         justify-content: end;
         align-items: center;
-    }
+    };
 `;
 
 export const AmountContainer = styled.div`
@@ -116,6 +144,11 @@ export const SearchInput = styled(Input)<InputProps>`
     padding: 4px 12px;
     font-size: 16px;
     margin-bottom: 1.5em;
+    
+    @media screen and (max-width: ${devices.mobile}) {
+        width: 80%;
+        margin-bottom: 0.75rem;
+    }
 `;
 
 export const NotFoundContainer = styled.p`
@@ -147,6 +180,15 @@ export const FooterBar = styled.div<{ expanded: boolean }>`
         font-size: 22px;
         font-weight: 500;
     }
+
+    @media screen and (max-width: ${devices.tablet}) {
+        height: ${({ expanded }) => (expanded ? '80%' : '70px')};
+    }
+    
+    @media screen and (max-width: ${devices.mobile}) {
+        height: ${({ expanded }) => (expanded ? '90%' : '52px')};
+        padding: 0 16px 16px 16px;
+    }
 `;
 
 export const FooterTitleContainer = styled.div`
@@ -155,6 +197,18 @@ export const FooterTitleContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    @media screen and (max-width: ${devices.tablet}) {
+        margin: 24px 0;
+    }
+    
+    @media screen and (max-width: ${devices.mobile}) {
+        margin: 14px 0;
+        
+        h3 {
+            font-size: 14px;
+        };
+    }
 `;
 
 export const ExpandButton = styled.button`
@@ -182,8 +236,14 @@ export const DonationsDetailContainer = styled.div`
     }
     scrollbar-width: none;
     
-    h4 {
+    h3 {
         font-size: 16px;
+    }
+    
+    @media screen and (max-width: ${devices.mobile}) {
+        h3 {
+            font-size: 14px;
+        }
     }
 `;
 
@@ -201,7 +261,7 @@ export const UploadImageContainer = styled.div`
     overflow: hidden;
     position: relative;
     
-    @media screen and (max-width: 440px) {
+    @media screen and (max-width: ${devices.mobile}) {
         height: 200px;
     }
     

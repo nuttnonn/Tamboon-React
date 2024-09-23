@@ -22,8 +22,8 @@ const GlobalStyles = createGlobalStyle`
         margin: 1.5em 0 0.75em 0;
         
         @media (max-width: 440px) {
-            font-size: 3.75rem;
-            margin: 0.5em 0.5em;
+            font-size: 1.75rem;
+            margin: 0.75em 0;
         }
     }
     

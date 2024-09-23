@@ -36,15 +36,12 @@ const AllDonationAmount = () => {
                 ))}
             </ul>
         ),
-        style: {
-            marginBottom: 16,
-        },
     }));
 
     return (
         <FooterBar expanded={isOpened}>
             <FooterTitleContainer>
-                <p>Total all donations: {hundredsDivider(donate)} THB</p>
+                <h3>Total all donations: {hundredsDivider(donate)} THB</h3>
                 <ExpandButton onClick={handleExpand}>
                     <FaChevronUp
                         style={{
@@ -57,7 +54,7 @@ const AllDonationAmount = () => {
                 </ExpandButton>
             </FooterTitleContainer>
             <DonationsDetailContainer>
-                <h4><u>Donations Detail</u></h4>
+                <h3><u>Donations Detail</u></h3>
                 <Collapse
                     ghost
                     accordion
