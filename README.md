@@ -103,7 +103,7 @@ To run the Tamboon React application locally, follow these steps:
 
 2. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/tamboon-react.git
+   git clone https://github.com/nuttnonn/Tamboon-React.git
    cd tamboon-react
 
 3. **Install Dependencies**:
