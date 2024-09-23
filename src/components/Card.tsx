@@ -1,33 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { Charity, RootState } from '../types';
-import { Button, Radio } from 'antd';
+import { Button, Form, message, Modal, Radio } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearPaymentStatus } from '../redux/actions/donateActions';
 import { updateMessage } from '../redux/actions/messageActions';
-import { AmountContainer, CardWrapper, CloseButton, Image, MessageContainer, TitleContainer } from './StyledComponents';
+import {
+    AmountContainer,
+    CardWrapper,
+    CharityModal,
+    CloseButton, EditButton,
+    Image,
+    MessageContainer, ModalFooterContainer,
+    TitleContainer,
+} from './StyledComponents';
 import { hundredsDivider } from '../utils/helpers';
+import CharityForm from './CharityForm';
+import { deleteCharity, editCharity } from '../utils/api/charitiesApi';
+import { DeleteOutlined, EditOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 
 interface CardProps {
     charity: Charity,
     onPay: (id: number, amount: number, currency: string) => void,
+    onCharityEdited: () => void;
 }
 
-const Card: React.FC<CardProps> = ({ charity, onPay }) => {
+const donationAmounts: number[] = [10, 20, 50, 100, 500];
+
+const Card: React.FC<CardProps> = ({ charity, onPay, onCharityEdited }) => {
     const { id, name, image, currency } = charity;
     const charityDonations = useSelector((state: RootState) => state.donate.charityDonations);
+    const [form] = Form.useForm<{ name: string; image: string; currency: string; }>();
 
     const dispatch = useDispatch();
     const isLoading = useSelector((state: RootState) => state.donate.isLoading);
-    const message = useSelector((state: RootState) => state.message.messages[id]);
+    const donateMessage = useSelector((state: RootState) => state.message.messages[id]);
     const isPaymentSuccess = useSelector((state: RootState) => state.donate.isPaymentSuccess[id]);
 
     const [selectedAmount, setSelectedAmount] = useState<number>(10);
     const [isSelectAmountOpened, setIsSelectAmountOpened] = useState<boolean>(false);
     const [totalAmount, setTotalAmount] = useState<string | undefined>(undefined);
-    // const [currency, setCurrency] = useState();
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-    const imageUrl = `/images/${image}`
-    const donationAmounts: number[] = [10, 20, 50, 100, 500];
+    useEffect(() => {
+        form.setFieldsValue({
+            name: charity.name,
+            image: charity.image,
+            currency: charity.currency,
+        });
+    }, []);
 
     useEffect(() => {
         if (charityDonations && charityDonations[charity.id]) {
@@ -58,9 +78,49 @@ const Card: React.FC<CardProps> = ({ charity, onPay }) => {
         setIsSelectAmountOpened(false);
     }
 
+    const handleOk = async () => {
+        try {
+            const formData = await form.validateFields();
+            await editCharity(charity.id, formData);
+            message.success('Edit charity successfully');
+            onCharityEdited();
+            setIsModalOpen(false);
+            form.resetFields();
+        } catch (error) {
+            console.log('Validate Failed:', error);
+            message.error('Failed to edit charity');
+        }
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false)
+    }
+
+    const removeCharity = async () => {
+        try {
+            await deleteCharity(charity.id);
+            message.success('Charity removed successfully');
+            onCharityEdited();
+        } catch (error) {
+            console.error('Failed to delete charity:', error);
+            message.error('Failed to remove charity');
+        }
+    }
+
+    const showConfirm = () => {
+        Modal.confirm({
+            title: 'Do you want to remove this charity?',
+            icon: <ExclamationCircleFilled />,
+            onOk () {
+                removeCharity();
+            },
+            centered: true,
+        });
+    };
+
     return (
         <CardWrapper>
-            <Image src={imageUrl} alt={`${name}-image`} />
+            <Image src={`/images/${image}`} alt={`${name}-image`} />
             <TitleContainer>
                 <h2>{name} (Total {totalAmount} {currency})</h2>
                 <Button
@@ -72,7 +132,7 @@ const Card: React.FC<CardProps> = ({ charity, onPay }) => {
                     Donate
                 </Button>
             </TitleContainer>
-            {(isSelectAmountOpened && !message) && (
+            {(isSelectAmountOpened && !donateMessage) && (
                 <AmountContainer>
                     <p>Select the amount to donate ({currency})</p>
                     <Radio.Group
@@ -95,9 +155,9 @@ const Card: React.FC<CardProps> = ({ charity, onPay }) => {
                     </Button>
                 </AmountContainer>
             )}
-            {message && (
+            {donateMessage && (
                 <MessageContainer isSuccess={isPaymentSuccess}>
-                    {message}
+                    {donateMessage}
                     <Button
                         type="text"
                         onClick={clearStatus}
@@ -107,6 +167,35 @@ const Card: React.FC<CardProps> = ({ charity, onPay }) => {
                     <CloseButton onClick={clearStatus} />
                 </MessageContainer>
             )}
+            <EditButton
+                size="large"
+                icon={<EditOutlined />}
+                onClick={() => setIsModalOpen(true)}
+            />
+            <CharityModal
+                title="Edit Charity Information"
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                centered
+                footer={(_, { OkBtn, CancelBtn }) => (
+                    <ModalFooterContainer>
+                        <Button
+                            danger
+                            icon={<DeleteOutlined />}
+                            onClick={showConfirm}
+                        >
+                            Remove Charity
+                        </Button>
+                        <div>
+                            <CancelBtn />
+                            <OkBtn />
+                        </div>
+                    </ModalFooterContainer>
+                )}
+            >
+                <CharityForm form={form} formName={`${name}-form`} />
+            </CharityModal>
         </CardWrapper>
     );
 };

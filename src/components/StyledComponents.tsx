@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { Input, Modal } from 'antd';
+import { Button, Input, Modal } from 'antd';
 import { InputProps } from 'antd/lib/input';
 
 export const Container = styled.div`
@@ -12,7 +12,7 @@ export const Container = styled.div`
     justify-content: center;
     align-items: center;
 
-    @media (max-width: 440px) {
+    @media screen and (max-width: 440px) {
         padding: 40px;
     }
 `;
@@ -22,7 +22,7 @@ export const CardContainer = styled.div`
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
 
-    @media (max-width: 768px) {
+    @media screen and (max-width: 768px) {
         grid-template-columns: 1fr;
     }
 `;
@@ -216,5 +216,25 @@ export const UploadImageContainer = styled.div`
         position: absolute;
         right: 10px;
         top: 10px;
+    }
+`;
+
+export const EditButton = styled(Button)`
+    position: absolute;
+    left: 10px;
+    top: 10px;
+`;
+
+export const ModalFooterContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    div {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        gap: 0.5rem;
     }
 `;

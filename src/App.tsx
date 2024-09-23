@@ -96,7 +96,7 @@ const App = () => {
             <Container>
                 <h1>Omise Tamboon React</h1>
                 <SearchInput
-                    placeholder="Search by charity name"
+                    placeholder="Enter charity name..."
                     prefix={<SearchOutlined style={{ color: '#bfbfbf', marginBottom: '1px', marginRight: '4px' }} />}
                     allowClear={true}
                     onChange={handleSearch}
@@ -108,6 +108,7 @@ const App = () => {
                                 key={charity.id}
                                 charity={charity}
                                 onPay={handlePay}
+                                onCharityEdited={fetchData}
                             />
                         ))}
                         <AddCharity onCharityCreated={fetchData} />

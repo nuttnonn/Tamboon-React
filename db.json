@@ -2,7 +2,7 @@
   "charities": [
     {
       "id": 1,
-      "name": "Baan Kru Noi",
+      "name": "Baan Kru Noi Edited",
       "image": "baan-kru-noi.jpg",
       "currency": "THB"
     },
@@ -31,22 +31,22 @@
       "currency": "THB"
     },
     {
-      "image": "group-happy-diverse-volunteers.jpg",
+      "image": "larm-rmah-AEaTUnvneik-unsplash.jpg",
       "name": "Test 1",
       "currency": "EUR",
       "id": 6
     },
     {
       "image": "2149012193.jpg",
-      "name": "Test 2",
+      "name": "Test 2 edit",
       "currency": "THB",
       "id": 7
     },
     {
-      "image": "larm-rmah-AEaTUnvneik-unsplash.jpg",
-      "name": "Test 3",
+      "image": "group-happy-diverse-volunteers.jpg",
+      "name": "Test 4",
       "currency": "AUD",
-      "id": 8
+      "id": 9
     }
   ],
   "payments": [
@@ -711,22 +711,52 @@
       "id": 110
     },
     {
-      "charitiesId": 8,
-      "amount": 500,
-      "currency": "AUD",
-      "id": 111
-    },
-    {
       "charitiesId": 7,
       "amount": 100,
       "currency": "THB",
       "id": 112
     },
     {
-      "charitiesId": 8,
-      "amount": 20,
-      "currency": "AUD",
-      "id": 113
+      "charitiesId": 1,
+      "amount": 100,
+      "currency": "THB",
+      "id": 114
+    },
+    {
+      "charitiesId": 2,
+      "amount": 100,
+      "currency": "THB",
+      "id": 115
+    },
+    {
+      "charitiesId": 3,
+      "amount": 500,
+      "currency": "THB",
+      "id": 116
+    },
+    {
+      "charitiesId": 2,
+      "amount": 500,
+      "currency": "THB",
+      "id": 117
+    },
+    {
+      "charitiesId": 2,
+      "amount": 500,
+      "currency": "THB",
+      "id": 118
+    },
+    {
+      "charitiesId": 4,
+      "amount": 100,
+      "currency": "THB",
+      "id": 119
+    },
+    {
+      "charitiesId": 1,
+      "amount": 500,
+      "currency": "THB",
+      "id": 120
     }
   ]
 }

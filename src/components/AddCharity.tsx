@@ -10,7 +10,7 @@ interface AddCharityProps {
 }
 
 const AddCharity: React.FC<AddCharityProps> = ({ onCharityCreated }) => {
-    const [form] = Form.useForm();
+    const [form] = Form.useForm<{ name: string; image: string; currency: string; }>();
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -30,6 +30,7 @@ const AddCharity: React.FC<AddCharityProps> = ({ onCharityCreated }) => {
 
     const handleCancel = () => {
         setIsModalOpen(false)
+        form.resetFields();
     }
 
     return (
@@ -42,13 +43,13 @@ const AddCharity: React.FC<AddCharityProps> = ({ onCharityCreated }) => {
                 Create new charity
             </Button>
             <CharityModal
-                title="Create new charity"
+                title="Create New Charity"
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
                 centered
             >
-                <CharityForm form={form} />
+                <CharityForm form={form} formName="create-charity-form" />
             </CharityModal>
         </CardWrapper>
     );
