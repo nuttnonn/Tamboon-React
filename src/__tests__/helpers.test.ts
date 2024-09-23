@@ -63,6 +63,7 @@ describe('helpers', () => {
                         { charitiesId: 1, amount: 100, currency: 'charity1 currency', id: 1 },
                         { charitiesId: 1, amount: 200, currency: 'charity1 currency', id: 2 },
                     ],
+                    currency: 'charity1 currency',
                     total: 300,
                 },
                 2: {
@@ -70,6 +71,7 @@ describe('helpers', () => {
                     donations: [
                         { charitiesId: 2, amount: 300, currency: 'charity2 currency', id: 3 },
                     ],
+                    currency: 'charity2 currency',
                     total: 300,
                 },
             });
@@ -81,11 +83,13 @@ describe('helpers', () => {
                 1: {
                     name: 'Charity One',
                     donations: [],
+                    currency: 'charity1 currency',
                     total: 0,
                 },
                 2: {
                     name: 'Charity Two',
                     donations: [],
+                    currency: 'charity2 currency',
                     total: 0,
                 },
             });
@@ -97,7 +101,12 @@ describe('helpers', () => {
             ];
             const result = summaryDonationsByCharity(newCharities, payments);
             expect(result).toEqual({
-                3: { name: 'Charity Three', donations: [], total: 0 },
+                3: {
+                    name: 'Charity Three',
+                    donations: [],
+                    currency: 'charity3 currency',
+                    total: 0,
+                },
             });
         });
     });

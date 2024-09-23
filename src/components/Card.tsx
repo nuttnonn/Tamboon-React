@@ -24,6 +24,7 @@ const Card: React.FC<CardProps> = ({ charity, onPay }) => {
     const [selectedAmount, setSelectedAmount] = useState<number>(10);
     const [isSelectAmountOpened, setIsSelectAmountOpened] = useState<boolean>(false);
     const [totalAmount, setTotalAmount] = useState<string | undefined>(undefined);
+    // const [currency, setCurrency] = useState();
 
     const imageUrl = `/images/${image}`
     const donationAmounts: number[] = [10, 20, 50, 100, 500];
@@ -61,7 +62,7 @@ const Card: React.FC<CardProps> = ({ charity, onPay }) => {
         <CardWrapper>
             <Image src={imageUrl} alt={`${name}-image`} />
             <TitleContainer>
-                <h2>{name} {totalAmount && `(Total ${totalAmount} THB)`}</h2>
+                <h2>{name} (Total {totalAmount} {currency})</h2>
                 <Button
                     type="primary"
                     ghost

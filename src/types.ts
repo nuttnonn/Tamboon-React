@@ -15,11 +15,18 @@ export interface Payment {
 export interface CharityDonation {
     name: string;
     donations: Payment[];
+    currency: string;
     total: number;
 }
 
 export interface CharityDonations {
     [key: number]: CharityDonation;
+}
+
+export interface CrateCharityRequestData {
+    name: string;
+    image: string;
+    currency: string;
 }
 
 export interface RootState {

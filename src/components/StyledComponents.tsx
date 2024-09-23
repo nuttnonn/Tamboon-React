@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { Input } from 'antd';
+import { Input, Modal } from 'antd';
 import { InputProps } from 'antd/lib/input';
 
 export const Container = styled.div`
@@ -33,6 +33,8 @@ export const CardWrapper = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0.1rem 0.1rem 0.8rem #b6b5b5;
@@ -182,5 +184,37 @@ export const DonationsDetailContainer = styled.div`
     
     h4 {
         font-size: 16px;
+    }
+`;
+
+export const CharityModal = styled(Modal)`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const UploadImageContainer = styled.div`
+    width: 100%;
+    height: 280px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    
+    @media screen and (max-width: 440px) {
+        height: 200px;
+    }
+    
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+    
+    div {
+        position: absolute;
+        right: 10px;
+        top: 10px;
     }
 `;

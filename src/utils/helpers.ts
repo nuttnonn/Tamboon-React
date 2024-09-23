@@ -17,6 +17,7 @@ export const summaryDonationsByCharity = (charities: Charity[], payments: Paymen
         charityDonations[charity.id] = {
             name: charity.name,
             donations: [],
+            currency: charity.currency,
             total: 0,
         };
     });

@@ -23,7 +23,7 @@ const AllDonationAmount = () => {
         key: charityId,
         label: (
             <span style={{ color: textColor }}>
-                {donation.name}: (Total {hundredsDivider(donation.total)} THB)
+                {donation.name}: (Total {hundredsDivider(donation.total)} {donation.currency})
             </span>
         ),
         children: (

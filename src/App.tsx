@@ -19,6 +19,7 @@ import { CardContainer, Container, NotFoundContainer, SearchInput } from './comp
 import { SearchOutlined } from '@ant-design/icons';
 import AllDonationAmount from './components/AllDonationAmount';
 import { Empty } from 'antd';
+import AddCharity from './components/AddCharity';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -27,21 +28,21 @@ const App = () => {
     const [payments, setPayments] = useState<Payment[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
 
+    const fetchData = async () => {
+        try {
+            const [charityData, paymentData] = await Promise.all([
+                fetchCharities(),
+                fetchPayments(),
+            ]);
+
+            setCharities(charityData.data);
+            setPayments(paymentData.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [charityData, paymentData] = await Promise.all([
-                    fetchCharities(),
-                    fetchPayments(),
-                ]);
-
-                setCharities(charityData.data);
-                setPayments(paymentData.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
         fetchData();
     }, [dispatch]);
 
@@ -109,6 +110,7 @@ const App = () => {
                                 onPay={handlePay}
                             />
                         ))}
+                        <AddCharity onCharityCreated={fetchData} />
                     </CardContainer>
                 ) : (
                     <NotFoundContainer>

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { CrateCharityRequestData } from '../../types';
 
 export const fetchCharities = async () => {
     try {
@@ -8,3 +9,12 @@ export const fetchCharities = async () => {
         throw error;
     }
 };
+
+export const createCharity = async (requestData: CrateCharityRequestData) => {
+    try {
+        return await axios.post('/charities', requestData)
+    } catch (error) {
+        console.error('Error creating charity:', error)
+        throw error;
+    }
+}
