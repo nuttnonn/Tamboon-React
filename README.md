@@ -68,3 +68,62 @@ You can push the project to your Github then share the link with us, or you can 
 If you notice more bugs in the original implementation you can add fixes for those as well. You won't be penalized if you don't. However we ask you not to add more features than the one given in the mission list.
 
 Let's rock! :metal:
+
+## What I've Done
+
+### Features Completed
+- Implemented a responsive design for the application, ensuring a seamless user experience across various screen sizes.
+- Completed the donation feature, allowing users to donate with accurate amounts displayed and persisted across sessions.
+- Developed the functionality to display all donation amounts for different charities, enhancing visibility for users.
+- Created a success and error message display system that provides immediate feedback upon donation completion.
+- Refactored the code for better readability and reusability, improving maintainability.
+
+### Technologies Used
+- Transitioned the project from JavaScript to TypeScript for improved type safety and better developer experience.
+- Utilized styled-components for styling the application, enhancing the design with modern CSS techniques.
+
+### Bonus Features
+- Ensured compatibility with modern browsers (Google Chrome, Safari, Firefox) for a wider audience reach.
+- Wrote unit tests with Jest to verify the functionality of key components.
+
+### Reflections
+- Adhered to the challenge's mission to complete the application according to the provided design and requirements.
+- Followed the rules strictly, ensuring no existing behaviors were altered and that the API server remained untouched.
+- Took the opportunity to improve the UI/UX without changing the core functionalities, showcasing my ability to innovate within constraints.
+
+## How to Run the App
+
+To run the Tamboon React application locally, follow these steps:
+
+1. **Use Node Version 16**:
+   Ensure you have Node.js version 16 installed. You can use [nvm (Node Version Manager)](https://github.com/nvm-sh/nvm) to easily switch between Node versions:
+   ```bash
+   nvm install 16
+   nvm use 16
+
+2. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/tamboon-react.git
+   cd tamboon-react
+
+3. **Install Dependencies**:
+   ```bash
+   npm install
+
+4. **Run the JSON Server**:
+   ```bash
+   npm run server
+
+5. **Run the Development Server**:
+   ```bash
+   npm run client
+
+6. **Testing the Application**:
+   ```bash
+   npm run test
+   
+
+## Image Upload Instructions
+
+When creating or editing a charity, you can upload an image. The image must be selected from the `/public/images` directory of this project.
+If you need to test with different images, make sure to add them to the `/public/images` directory before uploading. This ensures that the application can access the images correctly.
